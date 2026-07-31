@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "StartupIMS.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61901;http://localhost:61902"
+    }
+  }
+}
