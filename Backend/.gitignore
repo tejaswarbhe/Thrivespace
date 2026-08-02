@@ -1,0 +1,142 @@
+# ============================================================
+# StartupIMS - .gitignore
+# ============================================================
+
+# ----------------------------
+# Build output
+# ----------------------------
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+
+# ----------------------------
+# Visual Studio
+# ----------------------------
+.vs/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ----------------------------
+# Rider / VS Code
+# ----------------------------
+.idea/
+.vscode/
+
+# Keep shared workspace settings if desired
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ----------------------------
+# NuGet
+# ----------------------------
+packages/
+*.nupkg
+*.snupkg
+
+# ----------------------------
+# Logs
+# ----------------------------
+*.log
+logs/
+
+# ----------------------------
+# Temporary files
+# ----------------------------
+*.tmp
+*.temp
+*.cache
+
+# ----------------------------
+# OS generated files
+# ----------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ----------------------------
+# Environment files
+# ----------------------------
+.env
+.env.*
+
+# ----------------------------
+# ASP.NET Core configuration
+# ----------------------------
+
+# Local development configuration
+**/appsettings.Development.json
+
+# Uncomment ONLY if your appsettings.json contains secrets
+# **/appsettings.json
+
+# ----------------------------
+# Entity Framework
+# ----------------------------
+*.dbmdl
+
+# ----------------------------
+# Test results
+# ----------------------------
+TestResults/
+coverage/
+coverage.*
+
+# ----------------------------
+# Publish profiles
+# ----------------------------
+Properties/PublishProfiles/
+
+# ----------------------------
+# IIS
+# ----------------------------
+iisexpress/
+*.vspscc
+
+# ----------------------------
+# Azure
+# ----------------------------
+.publish/
+.azure/
+
+# ----------------------------
+# Node (future React frontend)
+# ----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ----------------------------
+# Python (future analytics module)
+# ----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# ----------------------------
+# Docker
+# ----------------------------
+docker-compose.override.yml
+
+# ----------------------------
+# Archives
+# ----------------------------
+*.zip
+*.rar
+*.7z
+
+# ----------------------------
+# Backup files
+# ----------------------------
+*.bak
+*.old
+*.orig
