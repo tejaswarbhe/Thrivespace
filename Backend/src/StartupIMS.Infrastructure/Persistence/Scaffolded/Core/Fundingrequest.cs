@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,6 +24,9 @@ public partial class Fundingrequest
     [StringLength(20)]
     public string ApprovalStatus { get; set; } = null!;
 
+    [StringLength(20)]
+    public string? PaymentStatus { get; set; }
+
     public int? ApprovedByUserId { get; set; }
 
     [Column(TypeName = "datetime")]
@@ -31,6 +34,9 @@ public partial class Fundingrequest
 
     [StringLength(200)]
     public string? TransactionReference { get; set; }
+
+    [StringLength(500)]
+    public string? PaymentUrl { get; set; }
 
     [ForeignKey("StartupId")]
     [InverseProperty("Fundingrequests")]

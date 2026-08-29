@@ -1,142 +1,25 @@
-# ============================================================
-# StartupIMS - .gitignore
-# ============================================================
+# Build artifacts
+**/bin/
+**/obj/
+**/out/
 
-# ----------------------------
-# Build output
-# ----------------------------
-[Bb]in/
-[Oo]bj/
-out/
-publish/
-
-# ----------------------------
 # Visual Studio
-# ----------------------------
 .vs/
 *.user
-*.rsuser
 *.suo
-*.userosscache
-*.sln.docstates
 
-# ----------------------------
-# Rider / VS Code
-# ----------------------------
-.idea/
-.vscode/
+# Secrets - appsettings.json itself is fine (placeholders only), but any
+# environment-specific override files are not
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
+.env
 
-# Keep shared workspace settings if desired
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
+# Uploaded files (pitch decks)
+App_Data/uploads/
 
-# ----------------------------
-# NuGet
-# ----------------------------
-packages/
-*.nupkg
-*.snupkg
-
-# ----------------------------
-# Logs
-# ----------------------------
-*.log
+# Serilog output
 logs/
 
-# ----------------------------
-# Temporary files
-# ----------------------------
-*.tmp
-*.temp
-*.cache
-
-# ----------------------------
-# OS generated files
-# ----------------------------
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# ----------------------------
-# Environment files
-# ----------------------------
-.env
-.env.*
-
-# ----------------------------
-# ASP.NET Core configuration
-# ----------------------------
-
-# Local development configuration
-**/appsettings.Development.json
-
-# Uncomment ONLY if your appsettings.json contains secrets
-# **/appsettings.json
-
-# ----------------------------
-# Entity Framework
-# ----------------------------
-*.dbmdl
-
-# ----------------------------
-# Test results
-# ----------------------------
-TestResults/
-coverage/
-coverage.*
-
-# ----------------------------
-# Publish profiles
-# ----------------------------
-Properties/PublishProfiles/
-
-# ----------------------------
-# IIS
-# ----------------------------
-iisexpress/
-*.vspscc
-
-# ----------------------------
-# Azure
-# ----------------------------
-.publish/
-.azure/
-
-# ----------------------------
-# Node (future React frontend)
-# ----------------------------
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# ----------------------------
-# Python (future analytics module)
-# ----------------------------
-__pycache__/
-*.py[cod]
-*.pyo
-.venv/
-venv/
-
-# ----------------------------
-# Docker
-# ----------------------------
-docker-compose.override.yml
-
-# ----------------------------
-# Archives
-# ----------------------------
-*.zip
-*.rar
-*.7z
-
-# ----------------------------
-# Backup files
-# ----------------------------
-*.bak
-*.old
-*.orig
+# EF Core migrations bundle output, if ever generated
+*.dll

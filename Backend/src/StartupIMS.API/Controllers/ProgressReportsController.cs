@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StartupIMS.Infrastructure.Persistence;
 using StartupIMS.Infrastructure.Persistence.Scaffolded.Core;
+using StartupIMS.Infrastructure.Services;
 using StartupIMS.Shared.DTOs;
 
 namespace StartupIMS.API.Controllers;
@@ -14,80 +15,110 @@ namespace StartupIMS.API.Controllers;
 public class ProgressReportsController : ControllerBase
 {
     private readonly CoreDbContext _db;
+    private readonly IStartupVisibilityService _visibility;
 
-    public ProgressReportsController(CoreDbContext db)
+    public ProgressReportsController(CoreDbContext db, IStartupVisibilityService visibility)
     {
         _db = db;
+        _visibility = visibility;
     }
 
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
     private bool IsAdmin => User.IsInRole("Admin");
     private bool IsMentor => User.IsInRole("Mentor");
 
-    private async Task<List<int>> GetVisibleStartupIdsAsync()
-    {
-        if (IsMentor)
-        {
-            var mentor = await _db.Mentors.SingleOrDefaultAsync(m => m.UserId == CurrentUserId);
-            if (mentor is null) return new List<int>();
-
-            return await _db.Mentorassignments
-                .Where(ma => ma.MentorId == mentor.Id)
-                .Select(ma => ma.StartupId)
-                .ToListAsync();
-        }
-
-        return await _db.Startups
-            .Where(s => s.UserId == CurrentUserId)
-            .Select(s => s.Id)
-            .ToListAsync();
-    }
+    private static ProgressReportResponse ToResponse(Progressreport p) => new(
+    p.Id, p.StartupId, p.CreatedByMentorId, p.SubmissionDate, p.Milestones, p.IsCompleted, p.CompletedDate, p.Remarks);
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Progressreport>>> GetAll()
+    public async Task<ActionResult<IEnumerable<ProgressReportResponse>>> GetAll()
     {
-        if (IsAdmin)
-            return await _db.Progressreports.ToListAsync();
+        List<Progressreport> reports;
 
-        var startupIds = await GetVisibleStartupIdsAsync();
-        return await _db.Progressreports
-            .Where(p => startupIds.Contains(p.StartupId))
-            .ToListAsync();
+        if (IsAdmin)
+        {
+            reports = await _db.Progressreports.ToListAsync();
+        }
+        else
+        {
+            var startupIds = await _visibility.GetVisibleStartupIdsAsync(CurrentUserId, IsMentor);
+            reports = await _db.Progressreports.Where(p => startupIds.Contains(p.StartupId)).ToListAsync();
+        }
+
+        return reports.Select(ToResponse).ToList();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Progressreport>> GetById(int id)
+    public async Task<ActionResult<ProgressReportResponse>> GetById(int id)
     {
         var report = await _db.Progressreports.FindAsync(id);
         if (report is null) return NotFound();
 
         if (!IsAdmin)
         {
-            var visibleIds = await GetVisibleStartupIdsAsync();
+            var visibleIds = await _visibility.GetVisibleStartupIdsAsync(CurrentUserId, IsMentor);
             if (!visibleIds.Contains(report.StartupId)) return Forbid();
         }
 
-        return report;
+        return ToResponse(report);
     }
 
     [HttpPost]
-    [Authorize(Policy = "FounderOnly")]
-    public async Task<ActionResult<Progressreport>> Create(CreateProgressReportRequest request)
+    [Authorize(Policy = "MentorOnly")]
+    public async Task<ActionResult<ProgressReportResponse>> Create(CreateProgressReportRequest request)
     {
-        var startup = await _db.Startups.SingleOrDefaultAsync(s => s.UserId == CurrentUserId);
-        if (startup is null)
-            return BadRequest("You must create a startup before submitting a progress report.");
+        var mentor = await _db.Mentors.SingleOrDefaultAsync(m => m.UserId == CurrentUserId);
+        if (mentor is null) return Forbid();
+
+        var visibleIds = await _visibility.GetVisibleStartupIdsAsync(CurrentUserId, isMentor: true);
+        if (!visibleIds.Contains(request.StartupId))
+            return Forbid(); // not your assigned startup
 
         var report = new Progressreport
         {
-            StartupId = startup.Id,
+            StartupId = request.StartupId,
+            CreatedByMentorId = mentor.Id,
             SubmissionDate = DateTime.UtcNow,
             Milestones = request.Milestones,
-            Remarks = request.Remarks
+            IsCompleted = false
         };
 
         _db.Progressreports.Add(report);
         await _db.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new { id = report.Id }, report);
+        return CreatedAtAction(nameof(GetById), new { id = report.Id }, ToResponse(report));
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Policy = "FounderOnly")]
+    public async Task<ActionResult<ProgressReportResponse>> Update(int id, UpdateProgressReportRequest request)
+    {
+        var report = await _db.Progressreports.FindAsync(id);
+        if (report is null) return NotFound();
+
+        var startup = await _db.Startups.FindAsync(report.StartupId);
+        if (startup is null || startup.UserId != CurrentUserId)
+            return Forbid();
+
+        report.IsCompleted = request.IsCompleted;
+        report.CompletedDate = request.IsCompleted ? DateTime.UtcNow : null;
+        report.Remarks = request.Remarks;
+        await _db.SaveChangesAsync();
+        return ToResponse(report);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Policy = "MentorOnly")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var report = await _db.Progressreports.FindAsync(id);
+        if (report is null) return NotFound();
+
+        var mentor = await _db.Mentors.SingleOrDefaultAsync(m => m.UserId == CurrentUserId);
+        if (mentor is null || report.CreatedByMentorId != mentor.Id)
+            return Forbid();
+
+        _db.Progressreports.Remove(report);
+        await _db.SaveChangesAsync();
+        return NoContent();
     }
 }

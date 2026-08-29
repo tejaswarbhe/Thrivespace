@@ -8,6 +8,7 @@ using StartupIMS.Infrastructure.Services;
 using StartupIMS.Shared.DTOs;
 using StartupIMS.Shared.Settings;
 using Microsoft.Extensions.Options;
+
 namespace StartupIMS.API.Controllers;
 
 [ApiController]
@@ -24,13 +25,15 @@ public class AuthController : ControllerBase
     private readonly CoreDbContext _coreDb;
 
     private readonly IJwtTokenService _jwt;
+    private readonly IEmailService _email;
     private readonly JwtSettings _jwtSettings;
 
-    public AuthController(IdentityDbContext db, CoreDbContext coreDb, IJwtTokenService jwt, IOptions<JwtSettings> jwtSettings)
+    public AuthController(IdentityDbContext db, CoreDbContext coreDb, IJwtTokenService jwt, IEmailService email, IOptions<JwtSettings> jwtSettings)
     {
         _db = db;
         _coreDb = coreDb;
         _jwt = jwt;
+        _email = email;
         _jwtSettings = jwtSettings.Value;
     }
 
@@ -82,9 +85,20 @@ public class AuthController : ControllerBase
             await _coreDb.SaveChangesAsync();
         }
 
+        await _email.SendAsync(
+            user.Email,
+            "Welcome to StartupIMS",
+            $"""
+            <h2>Welcome, {user.Name}!</h2>
+            <p>Your account has been created as a <strong>{user.Role}</strong>.</p>
+            {(request.Role == UserRole.Founder
+                ? $"<p>Your startup <strong>{request.StartupName}</strong> is now registered and ready to submit an incubation application.</p>"
+                : "")}
+            <p>You can now log in and get started.</p>
+            """);
+
         return await IssueTokens(user);
     }
-
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {

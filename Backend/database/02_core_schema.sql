@@ -91,6 +91,7 @@ CREATE TABLE FundingRequests (
     ApprovedByUserId    INT             NULL,   -- references Identity.Users.Id (app-enforced)
     ApprovedDate        DATETIME        NULL,
     TransactionReference VARCHAR(200)   NULL,
+    PaymentUrl          VARCHAR(500)    NULL,
 
     CONSTRAINT FK_FundingRequests_Startups
         FOREIGN KEY (StartupId) REFERENCES Startups(Id)

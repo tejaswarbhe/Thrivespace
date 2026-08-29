@@ -1,0 +1,33 @@
+# Project metadata
+/.metadata/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# .NET build files
+**/bin/
+**/obj/
+
+# Java / Maven build files
+**/target/
+
+# Frontend dependencies and builds
+**/node_modules/
+**/dist/
+**/build/
+
+# Vite temporary files
+*.timestamp-*.mjs
+
+# IDE files
+.vs/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project archives
+*.zip
