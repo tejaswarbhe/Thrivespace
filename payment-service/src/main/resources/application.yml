@@ -20,7 +20,7 @@ spring:
 startupims:
   inbound-api-key: "sk_9b3738c23b7549eba104f97c2fb02e29"
   api:
-    base-url: "https://localhost:61901"
+    base-url: "http://localhost:61902"
     service-key: "sk_b2e8f1a4d97c3b6e0a5f1d8c4b2e97a1"
 
 razorpay:
