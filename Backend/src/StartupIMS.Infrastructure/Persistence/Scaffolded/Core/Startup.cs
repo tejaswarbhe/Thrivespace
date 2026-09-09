@@ -29,6 +29,15 @@ public partial class Startup
     [StringLength(20)]
     public string Status { get; set; } = null!;
 
+    [StringLength(500)]
+    public string? PitchDeckPath { get; set; }
+
+    [StringLength(255)]
+    public string? PitchDeckOriginalFileName { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? PitchDeckUploadedAt { get; set; }
+
     [InverseProperty("Startup")]
     public virtual ICollection<Fundingrequest> Fundingrequests { get; set; } = new List<Fundingrequest>();
 

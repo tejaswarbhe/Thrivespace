@@ -1,0 +1,19 @@
+2026-08-10 17:37:13.836: [INFO] CurrentProfilePath: C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-08-10 17:37:13.836: [INFO] Profiles total count: 1
+2026-08-10 17:37:13.836: [INFO] Profile: name=Profile 1 path=C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-08-10 17:37:13.836: [INFO] LastUsedProfileDir: C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-08-10 17:37:13.836: [INFO] OnDoneLoading sync enabled: 0
+2026-08-10 17:37:13.836: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-10 17:37:13.836: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-10 17:37:13.836: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-10 17:38:29.513: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-10 17:42:31.325: [INFO] CurrentProfilePath: C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-08-10 17:42:31.325: [INFO] Profiles total count: 1
+2026-08-10 17:42:31.326: [INFO] Profile: name=Profile 1 path=C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-08-10T17:37:14.139Z
+2026-08-10 17:42:31.326: [INFO] LastUsedProfileDir: C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-08-10 17:42:31.326: [INFO] MostRecentlyActiveProfile: name=Profile 1 path=C:\Users\user\Desktop\project\backend v2\payment-service-razorpay\payment-service\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=2026-08-10T17:37:14.139Z
+2026-08-10 17:42:31.326: [INFO] OnDoneLoading sync enabled: 0
+2026-08-10 17:42:31.326: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-08-10 17:42:31.326: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-08-10 17:42:31.326: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-08-10 17:43:55.733: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

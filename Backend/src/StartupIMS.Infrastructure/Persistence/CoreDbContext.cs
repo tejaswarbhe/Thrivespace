@@ -29,6 +29,10 @@ public partial class CoreDbContext : DbContext
 
     public virtual DbSet<Startup> Startups { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;port=3306;database=startupims_core;user=root;password=@krishna1083", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.44-mysql"));
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -78,6 +82,10 @@ public partial class CoreDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.Property(e => e.SubmissionDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasOne(d => d.CreatedByMentor).WithMany(p => p.Progressreports)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_ProgressReports_Mentors");
 
             entity.HasOne(d => d.Startup).WithMany(p => p.Progressreports).HasConstraintName("FK_ProgressReports_Startups");
         });

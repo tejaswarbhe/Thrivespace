@@ -25,4 +25,7 @@ public partial class Mentor
 
     [InverseProperty("Mentor")]
     public virtual ICollection<Mentorassignment> Mentorassignments { get; set; } = new List<Mentorassignment>();
+
+    [InverseProperty("CreatedByMentor")]
+    public virtual ICollection<Progressreport> Progressreports { get; set; } = new List<Progressreport>();
 }

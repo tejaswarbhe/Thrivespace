@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d # auto-runs the .sql scripts on first start
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__IdentityDb: "Server=mysql;Port=3306;Database=startupims_identity;User=root;Password=${MYSQL_ROOT_PASSWORD:-changeme};"
+      ConnectionStrings__CoreDb: "Server=mysql;Port=3306;Database=startupims_core;User=root;Password=${MYSQL_ROOT_PASSWORD:-changeme};"
+      Jwt__Secret: ${JWT_SECRET:?JWT_SECRET must be set in a .env file - see .env.example}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - uploads-data:/app/App_Data/uploads
+      - logs-data:/app/logs
+
+volumes:
+  mysql-data:
+  uploads-data:
+  logs-data:
