@@ -53,6 +53,14 @@ public class RazorpayPaymentGatewayClient implements PaymentGatewayClient {
 
             request.put("reminder_enable", false);
 
+<<<<<<< HEAD
+=======
+            // Without this, Razorpay leaves the browser on its own success
+            // page after payment instead of returning the user to the app.
+            request.put("callback_url", settings.getCallbackUrl());
+            request.put("callback_method", "get");
+
+>>>>>>> 436043ff50618f147188a4a8619bea74c6b20790
             PaymentLink paymentLink = razorpay.paymentLink.create(request);
             String shortUrl = paymentLink.get("short_url");
 

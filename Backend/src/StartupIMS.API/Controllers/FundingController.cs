@@ -153,7 +153,11 @@ public class FundingController : ControllerBase
         {
             try
             {
+<<<<<<< HEAD
                 var paymentSession = await _paymentClient.InitiatePaymentAsync(funding.Id, funding.Amount, "USD");
+=======
+                var paymentSession = await _paymentClient.InitiatePaymentAsync(funding.Id, funding.Amount, "INR");
+>>>>>>> 436043ff50618f147188a4a8619bea74c6b20790
                 funding.PaymentUrl = paymentSession.PaymentUrl;
                 funding.PaymentStatus = "PENDING";
                 await _db.SaveChangesAsync();

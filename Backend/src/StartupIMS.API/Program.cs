@@ -56,7 +56,14 @@ builder.Services.AddSingleton<IFileStorageService, LocalFileStorageService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.SectionName));
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 builder.Services.Configure<PaymentServiceSettings>(builder.Configuration.GetSection(PaymentServiceSettings.SectionName));
+<<<<<<< HEAD
 builder.Services.AddHttpClient<IPaymentServiceClient, HttpPaymentServiceClient>();
+=======
+builder.Services.AddHttpClient<IPaymentServiceClient, HttpPaymentServiceClient>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
+>>>>>>> 436043ff50618f147188a4a8619bea74c6b20790
 
 // --- Auth: JWT bearer + role-based policies for the 3 platform roles ---
 builder.Services.AddAuthentication(options =>
@@ -147,7 +154,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// The Java payment-service calls /api/Funding/payment-webhook over plain
+// HTTP (its JVM trust store doesn't trust the ASP.NET Core dev HTTPS cert,
+// so an HTTPS call there fails with a PKIX/SSLHandshakeException). Skip the
+// HTTPS redirect for just that path so the plain HTTP request goes through
+// instead of bouncing back to HTTPS and hitting the same problem again.
+app.UseWhen(
+    context => !context.Request.Path.StartsWithSegments("/api/Funding/payment-webhook"),
+    branch => branch.UseHttpsRedirection());
 app.UseCors("ReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
